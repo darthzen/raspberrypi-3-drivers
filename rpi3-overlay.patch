@@ -1,0 +1,10 @@
+--- arch/arm64/boot/dts/Makefile        2016-10-25 05:58:20.000000000 -0500
++++ Makefile-dts        2017-09-08 12:02:02.383324418 -0500
+@@ -13,6 +13,7 @@
+ dts-dirs += rockchip
+ dts-dirs += sprd
+ dts-dirs += xilinx
++dts-dirs += rpi3-overlay
+
+ subdir-y       := $(dts-dirs)
+

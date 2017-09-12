@@ -1,0 +1,2 @@
+#!/bin/bash
+grep -h "compatible" ../raspberrypi-3-dtbs/rpi3-overlays/*.dts | grep -vhE '\/\*.*\*\/' | sed -E 's/^\s+compatible = (.*)+;/\1/' | sed -E 's/[ \"]+//g' | sed -E 's/\,/\n/g' | sort | uniq
