@@ -41,8 +41,8 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Device drivers for Raspberry Pi peripherals
 
 %package raspberrypi-3-dtbs
-Summary:
-Group:
+Summary:        Device tree binaries for Raspberry Pi peripherals
+Group:          System/Kernel
 
 %description %{name_base}-dtbs
 Devivce tree binaries for Raspberry Pi peripherals
