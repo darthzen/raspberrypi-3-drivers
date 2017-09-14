@@ -1,2 +1,83 @@
 #!/bin/bash
-grep -h "compatible" ../raspberrypi-3-dtbs/rpi3-overlays/*.dts | grep -vhE '\/\*.*\*\/' | sed -E 's/^\s+compatible = (.*)+;/\1/' | sed -E 's/[ \"]+//g' | sed -E 's/\,/\n/g' | sort | uniq
+SEARCHDIR="../raspberrypi-linux"
+SRCDIR="src"
+
+function pause(){
+    echo
+    read -p "$*"
+    echo
+}
+
+rm -f compatible-error ${SRCDIR}/Kbuild
+touch compatible-error ${SRCDIR}/Kbuild
+
+for TMP in `grep -h "compatible" rpi3-overlays/*.dts | grep -vhE '\/\*.*\*\/' | sed -E 's/^\s+compatible = \"(.*)+\";/\1/' | sed -E 's/\", \"/\"\n\"/g' | sed -E 's/\"//g' | sort | uniq` ; do
+    echo "TMP=$TMP"
+
+    # Check for source files with compatible string declared
+    COMPATIBLE=`grep -rl ".compatible = \"${TMP}\"" ${SEARCHDIR}/{drivers,sound}/*`
+    DEVICE=`echo ${TMP} | cut -d "," -f 2`
+    echo "COMPATIBLE_COMPATIBLE=${COMPATIBLE}"
+    echo "DEVICE=${DEVICE}"
+    
+    # Check for source files with declared name
+    if [[ -z "${COMPATIBLE}" && ! -z "${DEVICE}" ]] ; then
+        COMPATIBLE=`grep -rEl "\.name\s+=\s+\"${DEVICE}\"" ${SEARCHDIR}/{drivers,sound}/*`
+        echo "COMPATIBLE_NAME=${COMPATIBLE}"
+    fi
+    
+    # Check for source files with module driver line
+    if [[ -z "${COMPATIBLE}" && ! -z "${DEVICE}" ]] ; then
+        COMPATIBLE=`grep -rEl "module_[a-z0-9]+_driver\(${DEVICE}_driver\)" ${SEARCHDIR}/{drivers,sound}/*`
+        echo "COMPATIBLE_MODULE_DRIVER=${COMPATIBLE}"
+    fi
+
+    # Check for source files with module alias
+    if [[ -z "${COMPATIBLE}" && ! -z "${DEVICE}" ]] ; then
+        COMPATIBLE=`grep -rlE "MODULE_ALIAS\(\"[a-z]+:${DEVICE}" ${SEARCHDIR}/{drivers,sound}/*`
+        echo "COMPATIBLE_MODULE_ALIAS=${COMPATIBLE}"
+    fi
+
+    # Check for source files with declared device id
+    if [[ -z "${COMPATIBLE}" && ! -z "${DEVICE}" ]] ; then
+        COMPATIBLE=`grep -rlE "{ \"${DEVICE}\"" ${SEARCHDIR}/{drivers,sound}/*`
+        echo "COMPATIBLE_DEVICE_ID=${COMPATIBLE}"
+    fi
+
+    
+    # Check for source files with name that matches <device>.c
+    if [[ -z "${COMPATIBLE}" && ! -z "${DEVICE}" ]] ; then
+        COMPATIBLE=`find ${SEARCHDIR}/ -type f -name ${DEVICE}.c | grep -E "(drivers)|(sound)"`
+        echo "COMPATIBLE_FIND=${COMPATIBLE}"
+    fi
+
+    if [ -z "${COMPATIBLE}" ] ; then
+        echo "${TMP}" >> compatible-error
+    else
+        for FILE in ${COMPATIBLE} ; do 
+            TARGETDIR=`dirname ${FILE//"${SEARCHDIR}/"/""}`
+            mkdir -p ${SRCDIR}/${TARGETDIR}
+            cp -fv ${FILE} ${SRCDIR}/${TARGETDIR}/
+            echo "obj-m += ${FILE//"${SEARCHDIR}/"/""}" >> ${SRCDIR}/Kbuild
+            for HEADER in `grep "#include" ${FILE} | sed -E "s/#include\s+[<\"\'](.*)[>\"\']/\1/g"` ; do 
+                if [[ ! -z "${HEADER}" && ! "${HEADER}" =~ "#include" ]] ; then
+                    if [[ -f "${SEARCHDIR}/include/${HEADER}" ]]; then
+                        HEADERFILE="include/${HEADER}"
+                    elif [[ -f "${SEARCHDIR}/${TARGETDIR}/${HEADER}" ]] ; then
+                        HEADERFILE="${TARGETDIR}/${HEADER}"
+                    fi
+                    echo "HEADERFILE=${HEADERFILE}"
+                    HEADERDIR=`dirname ${HEADERFILE}`
+                    if [[ ! -f "/usr/src/linux/${HEADERFILE}" ]] ; then 
+                        mkdir -p ${SRCDIR}/${HEADERDIR}
+                        cp -fv ${SEARCHDIR}/${HEADERFILE} ${SRCDIR}/${HEADERDIR}
+                    fi
+                fi
+            done
+        done
+    fi
+    #pause "Press space to continue"
+done
+sed -iE "s/\.c$/\.o/g" ${SRCDIR}/Kbuild
+echo "" >> ${SRCDIR}/Kbuild
+echo 'ccflags-y += -I$(src)/include' >> ${SRCDIR}/Kbuild
