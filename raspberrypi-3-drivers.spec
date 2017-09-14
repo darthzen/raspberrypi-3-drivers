@@ -24,7 +24,7 @@ Release:        0
 Summary:        Device drivers for Raspberry Pi peripherals
 License:        GPLv2
 Group:          System/Kernel
-Url:            
+Url:            http://github.com/darthzen/raspberrypi-3-drivers
 Source0:        %{name}-%{version}.tar.xz
 Source1:        raspberrypi-linux.tar.xz        
 BuildRequires: %kernel_module_package_buildreqs
