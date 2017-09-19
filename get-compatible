@@ -57,7 +57,7 @@ for TMP in `grep -h "compatible" rpi3-overlays/*.dts | grep -vhE '\/\*.*\*\/' | 
         for FILE in ${COMPATIBLE} ; do 
             TARGETDIR=`dirname ${FILE//"${SEARCHDIR}/"/""}`
             mkdir -p ${SRCDIR}/${TARGETDIR}
-            cp -fv ${FILE} ${SRCDIR}/${TARGETDIR}/
+            rsync -av `dirname ${FILE}`/ ${SRCDIR}/${TARGETDIR}/
             echo "obj-m += ${FILE//"${SEARCHDIR}/"/""}" >> ${SRCDIR}/Kbuild
             for HEADER in `grep "#include" ${FILE} | sed -E "s/#include\s+[<\"\'](.*)[>\"\']/\1/g"` ; do 
                 if [[ ! -z "${HEADER}" && ! "${HEADER}" =~ "#include" ]] ; then
@@ -70,7 +70,7 @@ for TMP in `grep -h "compatible" rpi3-overlays/*.dts | grep -vhE '\/\*.*\*\/' | 
                     HEADERDIR=`dirname ${HEADERFILE}`
                     if [[ ! -f "/usr/src/linux/${HEADERFILE}" ]] ; then 
                         mkdir -p ${SRCDIR}/${HEADERDIR}
-                        cp -fv ${SEARCHDIR}/${HEADERFILE} ${SRCDIR}/${HEADERDIR}
+                        rsync -av ${SEARCHDIR}/${HEADERDIR}/* ${SRCDIR}/${HEADERDIR}
                     fi
                 fi
             done
