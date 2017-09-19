@@ -53,6 +53,8 @@ set -- *
 mkdir source
 mv "$@" source/
 mkdir obj
+mv -fv source/src/* source/
+rmdir source/src
 
 %define src_version $(rpm -qa |grep kernel-obs-build |sed -E 's/kernel-obs-build-([0-9]+\.[0-9]+\.[0-9]+)-[0-9\.]+\.noarch/\1/g')
 
