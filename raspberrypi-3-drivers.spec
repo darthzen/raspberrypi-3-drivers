@@ -58,8 +58,9 @@ mkdir obj
 
 %build
 for flavor in %flavors_to_build; do
-    rm -rf obj/$flavor
-    cp -r source obj/$flavor
+    echo "DIR=`pwd`"
+    rm -rfv obj/$flavor
+    cp -rv source obj/$flavor
     make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor
 done
 
