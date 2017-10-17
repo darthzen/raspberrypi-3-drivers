@@ -66,7 +66,7 @@ for flavor in %flavors_to_build; do
     make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor
 done
 
-source=linux-%srcversion
+source=linux-%src_version
 cp $source/COPYING .
 SRCDIR=`pwd`/$source
 mkdir pp
