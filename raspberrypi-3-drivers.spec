@@ -26,7 +26,6 @@ License:        GPLv2
 Group:          System/Kernel
 Url:            http://github.com/darthzen/raspberrypi-3-drivers
 Source0:        %{name}-%{version}.tar.xz
-Source1:        raspberrypi-linux.tar.xz        
 BuildRequires: %kernel_module_package_buildreqs
 %if 0%{?dtc_symbols}
 BuildRequires:  dtc >= 1.4.3
@@ -46,6 +45,10 @@ Group:          System/Kernel
 
 %description dtbs
 Devivce tree binaries for Raspberry Pi peripherals
+
+%package sensehat
+Summary:        Device drivers for SenseHat peripheral
+Group:          System/Kernel
 
 %prep
 %setup
@@ -134,6 +137,9 @@ cd /boot
 %dir %{dtbdir}/zte
 %{dtbdir}/zte/*.dtb
 
+%files sensehat
+%defattr(-,root,root)
+obj
 
 %changelog
 
