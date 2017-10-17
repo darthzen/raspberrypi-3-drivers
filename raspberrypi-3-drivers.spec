@@ -50,6 +50,9 @@ Devivce tree binaries for Raspberry Pi peripherals
 Summary:        Device drivers for SenseHat peripheral
 Group:          System/Kernel
 
+%description sensehat
+Device drivers for SenseHat peripheral
+
 %prep
 %setup
 set -- *
