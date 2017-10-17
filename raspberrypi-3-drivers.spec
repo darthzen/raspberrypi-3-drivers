@@ -58,8 +58,8 @@ rmdir source/src
 
 %define src_version $(rpm -qa |grep kernel-obs-build |sed -E 's/kernel-obs-build-([0-9]+\.[0-9]+\.[0-9]+)-[0-9\.]+\.noarch/\1/g')
 
-mkdir -p source/boot/dts
-mv -fv source/rpi3-overlays source/boot/dts/
+mkdir -p dts
+mv -fv source/rpi3-overlays dts/
 
 %build
 for flavor in %flavors_to_build; do
@@ -78,6 +78,8 @@ export DTC_FLAGS="-R 4 -p 0x1000"
 DTC_FLAGS="$DTC_FLAGS -@"
 %endif
 
+mkdir -p $source/arch/arm64/boot/
+cp -rv dts $source/arch/arm64/boot/
 cd $source/arch/arm64/boot/dts
 for dts in rpi3-overlays/*.dts ; do
     target=${dts%*.dts}
