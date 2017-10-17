@@ -112,19 +112,12 @@ for dts in rpi3-overlays/*.dts ; do
 done
 cd -
 
-
 %post
-cd /boot
-# If /boot/dtb is a symlink, remove it, so that we can replace it.
-[ -d dtb ] && [ -L dtb ] && rm -f dtb
-# Unless /boot/dtb exists as real directory, create a symlink.
-[ -d dtb ] || ln -sf dtb-%src_version dtb
 
 %postun
 
 %files dtbs
 %defattr(-,root,root)
-%ghost /boot/dtb
 %{dtbdir}
 
 
