@@ -1,5 +1,6 @@
 #!/bin/bash
-SEARCHDIR="../raspberrypi-linux"
+
+SEARCHDIR="../../raspberrypi/linux"
 SRCDIR="src"
 
 function pause(){
@@ -11,7 +12,14 @@ function pause(){
 rm -f compatible-error ${SRCDIR}/Kbuild
 touch compatible-error ${SRCDIR}/Kbuild
 
-for TMP in `grep -h "compatible" rpi3-overlays/*.dts | grep -vhE '\/\*.*\*\/' | sed -E 's/^\s+compatible = \"(.*)+\";/\1/' | sed -E 's/\", \"/\"\n\"/g' | sed -E 's/\"//g' | sort | uniq` ; do
+echo $1
+if [ -z "$1" ]; then
+    OVERLAY="rpi3-overlays/*.dts"
+else
+    OVERLAY="$1"
+fi
+
+for TMP in `grep -h "compatible" $OVERLAY | grep -vhE '\/\*.*\*\/' | sed -E 's/^\s+compatible = \"(.*)+\";/\1/' | sed -E 's/\", \"/\"\n\"/g' | sed -E 's/\"//g' | sort | uniq` ; do
     echo "TMP=$TMP"
 
     # Check for source files with compatible string declared
