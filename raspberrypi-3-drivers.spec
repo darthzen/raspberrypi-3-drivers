@@ -125,8 +125,7 @@ cd /boot
 %files dtbs
 %defattr(-,root,root)
 %ghost /boot/dtb
-%{dtbdir}/rpi3-overlays/rpi-sense-overlay.dtb
-%{dtbdir}/rpi-sense-overlay.dtb
+%{dtbdir}
 
 
 %changelog
