@@ -58,6 +58,9 @@ rmdir source/src
 
 %define src_version $(rpm -qa |grep kernel-obs-build |sed -E 's/kernel-obs-build-([0-9]+\.[0-9]+\.[0-9]+)-[0-9\.]+\.noarch/\1/g')
 
+mkdir source/dts
+mv -fv source/rpi3-overlays source/dts/
+
 %build
 for flavor in %flavors_to_build; do
     echo "DIR=`pwd`"
