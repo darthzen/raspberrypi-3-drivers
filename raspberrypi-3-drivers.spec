@@ -87,7 +87,7 @@ for dts in rpi3-overlays/*.dts ; do
     dtc $DTC_FLAGS -I dts -O dtb -i ./$(dirname $target) -o $PPDIR/$target.dtb $PPDIR/$target.dts
 done
 
-%define dtbdir /boot/dtb-%kernelrelease
+%define dtbdir /boot/dtb-%src_version
 
 
 %install
@@ -118,7 +118,7 @@ cd /boot
 # If /boot/dtb is a symlink, remove it, so that we can replace it.
 [ -d dtb ] && [ -L dtb ] && rm -f dtb
 # Unless /boot/dtb exists as real directory, create a symlink.
-[ -d dtb ] || ln -sf dtb-%kernelrelease dtb
+[ -d dtb ] || ln -sf dtb-%src_version dtb
 
 %postun
 
