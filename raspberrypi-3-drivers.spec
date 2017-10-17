@@ -46,13 +46,6 @@ Group:          System/Kernel
 %description dtbs
 Devivce tree binaries for Raspberry Pi peripherals
 
-%package sensehat
-Summary:        Device drivers for SenseHat peripheral
-Group:          System/Kernel
-
-%description sensehat
-Device drivers for SenseHat peripheral
-
 %prep
 %setup
 set -- *
@@ -129,20 +122,13 @@ cd /boot
 
 %postun
 
-%ifarch aarch64
-%files dtbs -f %{name_base}-dtbs.list
-%else
 %files dtbs
-%endif
 %defattr(-,root,root)
 %ghost /boot/dtb
 %dir %{dtbdir}
 %dir %{dtbdir}/zte
 %{dtbdir}/zte/*.dtb
 
-%files sensehat
-%defattr(-,root,root)
-obj
 
 %changelog
 
