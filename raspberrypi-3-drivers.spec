@@ -126,8 +126,6 @@ cd /boot
 %defattr(-,root,root)
 %ghost /boot/dtb
 %dir %{dtbdir}
-%dir %{dtbdir}/zte
-%{dtbdir}/zte/*.dtb
 
 
 %changelog
