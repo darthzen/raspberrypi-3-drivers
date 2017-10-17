@@ -67,7 +67,6 @@ for flavor in %flavors_to_build; do
 done
 
 source=linux-%src_version
-cp $source/COPYING .
 SRCDIR=`pwd`/$source
 mkdir pp
 PPDIR=`pwd`/pp
@@ -125,7 +124,6 @@ cd /boot
 %files dtbs
 %endif
 %defattr(-,root,root)
-%doc COPYING
 %ghost /boot/dtb
 %dir %{dtbdir}
 %dir %{dtbdir}/zte
