@@ -66,7 +66,7 @@ for flavor in %flavors_to_build; do
     make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor
 done
 
-source=linux-$(uname -r)
+source="linux-$(uname -r)"
 SRCDIR=`pwd`/$source
 mkdir pp
 PPDIR=`pwd`/pp
