@@ -55,8 +55,6 @@ mkdir obj
 mv -fv source/src/* source/
 rmdir source/src
 
-mkdir -p dts
-mv -fv source/rpi3-overlays dts/
 
 %build
 for flavor in %flavors_to_build; do
@@ -65,7 +63,7 @@ for flavor in %flavors_to_build; do
     make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor
 done
 
-SRCDIR=`pwd`/dts
+SRCDIR=`pwd`/rpi3-overlays
 mkdir pp
 PPDIR=`pwd`/pp
 export DTC_FLAGS="-R 4 -p 0x1000"
@@ -74,7 +72,7 @@ DTC_FLAGS="$DTC_FLAGS -@"
 %endif
 
 cd $SRCDIR
-for dts in rpi3-overlays/*.dts ; do
+for dts in *.dts ; do
     target=${dts%*.dts}
     mkdir -p $PPDIR/$(dirname $target)
     cpp -x assembler-with-cpp -undef -D__DTS__ -nostdinc -I. -I$SRCDIR/include/ -I$SRCDIR/scripts/dtc/include-prefixes/ -P $target.dts -o $PPDIR/$target.dts
