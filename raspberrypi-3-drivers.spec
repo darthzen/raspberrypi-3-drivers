@@ -66,7 +66,7 @@ for flavor in %flavors_to_build; do
     make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor
 done
 
-source=linux-%{kver}
+source=linux-%{kernelrelease}
 SRCDIR=`pwd`/$source
 mkdir pp
 PPDIR=`pwd`/pp
@@ -85,7 +85,7 @@ for dts in rpi3-overlays/*.dts ; do
     dtc $DTC_FLAGS -I dts -O dtb -i ./$(dirname $target) -o $PPDIR/$target.dtb $PPDIR/$target.dts
 done
 
-%define dtbdir /boot/dtb-%{kver}
+%define dtbdir /boot/dtb-%{kernelrelease}
 
 
 %install
