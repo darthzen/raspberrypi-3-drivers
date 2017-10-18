@@ -67,6 +67,7 @@ for flavor in %flavors_to_build; do
 done
 
 source="linux-$(uname -r)"
+ls -lh
 SRCDIR=`pwd`/$source
 mkdir pp
 PPDIR=`pwd`/pp
