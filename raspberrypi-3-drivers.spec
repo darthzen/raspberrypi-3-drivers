@@ -110,11 +110,6 @@ for dts in rpi3-overlays/*.dts ; do
 done
 cd -
 
-%post dtbs
-echo "dtoverlay=rpi-sense" >> /boot/efi/config.txt
-
-%postun
-
 %files dtbs
 %defattr(-,root,root)
 %{dtbdir}
