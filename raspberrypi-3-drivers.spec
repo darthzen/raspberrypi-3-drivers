@@ -94,12 +94,12 @@ for dts in *.dts ; do
     target=${dts%*.dts}
     install -m 700 -d %{buildroot}%{dtbdir}/$(dirname $target)
     install -m 644 $target.dtb %{buildroot}%{dtbdir}/$(dirname $target)
-%ifarch aarch64
+#%ifarch aarch64
     # HACK: work around U-Boot ignoring vendor dir
-    baselink=%{dtbdir}/$(basename $target).dtb
-    vendordir=$(basename $(dirname $target))
-    ln -s $target.dtb %{buildroot}$baselink
-    echo $baselink >> ../dtb-$vendordir.list
+#    baselink=%{dtbdir}/$(basename $target).dtb
+#    vendordir=$(basename $(dirname $target))
+#    ln -s $target.dtb %{buildroot}$baselink
+#    echo $baselink >> ../dtb-$vendordir.list
 %endif
 done
 cd -
