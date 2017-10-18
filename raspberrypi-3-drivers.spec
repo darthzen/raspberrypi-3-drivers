@@ -49,7 +49,7 @@ Devivce tree binaries for Raspberry Pi peripherals
 %prep
 %setup
 set -- *
-mkdir sourc
+mkdir source
 mv "$@" source/
 mkdir obj
 mv -fv source/src/* source/
@@ -60,15 +60,12 @@ mv -fv source/rpi3-overlays dts/
 
 %build
 for flavor in %flavors_to_build; do
-    echo "DIR=`pwd`"
     rm -rfv obj/$flavor
     cp -rv source obj/$flavor
     make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor
 done
 
-source="linux-$(uname -r)"
-ls -lh
-SRCDIR=`pwd`/$source
+SRCDIR=`pwd`/dts
 mkdir pp
 PPDIR=`pwd`/pp
 export DTC_FLAGS="-R 4 -p 0x1000"
@@ -76,9 +73,7 @@ export DTC_FLAGS="-R 4 -p 0x1000"
 DTC_FLAGS="$DTC_FLAGS -@"
 %endif
 
-mkdir -p $source/arch/arm64/boot/
-cp -rv dts $source/arch/arm64/boot/
-cd $source/arch/arm64/boot/dts
+cd $SRCDIR
 for dts in rpi3-overlays/*.dts ; do
     target=${dts%*.dts}
     mkdir -p $PPDIR/$(dirname $target)
