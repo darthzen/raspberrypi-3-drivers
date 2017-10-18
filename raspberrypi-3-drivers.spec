@@ -100,7 +100,7 @@ for dts in *.dts ; do
 #    vendordir=$(basename $(dirname $target))
 #    ln -s $target.dtb %{buildroot}$baselink
 #    echo $baselink >> ../dtb-$vendordir.list
-%endif
+#%endif
 done
 cd -
 
