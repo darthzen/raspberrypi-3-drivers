@@ -55,8 +55,6 @@ mkdir obj
 mv -fv source/src/* source/
 rmdir source/src
 
-%define src_version $(rpm -qa |grep kernel-obs-build |sed -E 's/kernel-obs-build-([0-9]+\.[0-9]+\.[0-9]+)-[0-9\.]+\.noarch/\1/g')
-
 mkdir -p dts
 mv -fv source/rpi3-overlays dts/
 
@@ -68,7 +66,7 @@ for flavor in %flavors_to_build; do
     make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor
 done
 
-source=linux-%{src_version}
+source=linux-%{kver}
 SRCDIR=`pwd`/$source
 mkdir pp
 PPDIR=`pwd`/pp
@@ -87,7 +85,7 @@ for dts in rpi3-overlays/*.dts ; do
     dtc $DTC_FLAGS -I dts -O dtb -i ./$(dirname $target) -o $PPDIR/$target.dtb $PPDIR/$target.dts
 done
 
-%define dtbdir /boot/dtb-%{src_version}
+%define dtbdir /boot/dtb-%{kver}
 
 
 %install
@@ -112,7 +110,8 @@ for dts in rpi3-overlays/*.dts ; do
 done
 cd -
 
-%post
+%post dtbs
+echo "dtoverlay=rpi-sense" >> /boot/efi/config.txt
 
 %postun
 
