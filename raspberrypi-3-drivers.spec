@@ -90,7 +90,7 @@ for flavor in %flavors_to_build; do
 done
 
 cd pp
-for dts in rpi3-overlays/*.dts ; do
+for dts in *.dts ; do
     target=${dts%*.dts}
     install -m 700 -d %{buildroot}%{dtbdir}/$(dirname $target)
     install -m 644 $target.dtb %{buildroot}%{dtbdir}/$(dirname $target)
