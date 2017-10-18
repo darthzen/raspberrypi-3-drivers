@@ -79,7 +79,7 @@ for dts in *.dts ; do
     dtc $DTC_FLAGS -I dts -O dtb -i ./$(dirname $target) -o $PPDIR/$target.dtb $PPDIR/$target.dts
 done
 
-%define dtbdir /boot/dtb-$(uname -r)
+%define dtbdir /boot/overlays
 
 
 %install
