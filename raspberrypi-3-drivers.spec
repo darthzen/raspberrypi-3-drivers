@@ -63,7 +63,7 @@ for flavor in %flavors_to_build; do
     make -C %{kernel_source $flavor} modules M=$PWD/obj/$flavor
 done
 
-SRCDIR=`pwd`/rpi3-overlays
+SRCDIR=`pwd`/source/rpi3-overlays
 mkdir pp
 PPDIR=`pwd`/pp
 export DTC_FLAGS="-R 4 -p 0x1000"
