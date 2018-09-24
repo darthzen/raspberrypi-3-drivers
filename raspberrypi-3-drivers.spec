@@ -38,14 +38,14 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 %kernel_module_package
 
 %description
-Device drivers for Raspberry Pi peripherals
+Device drivers for Raspberry Pi peripherals. Initial enablement is for the SenseHat.
 
 %package dtbs
 Summary:        Device tree binaries for Raspberry Pi peripherals
 Group:          System/Kernel
 
 %description dtbs
-Devivce tree binaries for Raspberry Pi peripherals
+Device tree binaries for Raspberry Pi peripherals. Initial enablement is for the SenseHat.
 
 %prep
 %setup
